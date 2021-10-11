@@ -1,0 +1,80 @@
+#!/usr/bin/env bash
+
+
+#########################################
+##infor aboutt he cluster 
+#cluster= smp (default)
+#cpartition= smp (default)
+#c100 nodes of 24-core Xeon Gold 6126 2.60 GHz (Skylake)
+#c192 GB RAM
+#c256 GB SSD & 500 GB SSD
+#c10GigE
+
+##cluster= mpi
+##partition= opa (default)
+##96 nodes of 28-core Intel Xeon E5-2690 2.60 GHz (Broadwell)
+##64 GB RAM/node
+##256 GB SSD
+##100 Gb Omni-Path
+##partition= ib
+##32 nodes of 20-core Intel Xeon E5-2660 2.60 GHz (Haswell)
+##128 GB RAM/node
+##56 Gb FDR
+
+
+#########################################
+
+#SBATCH --time=0-05:30:00
+
+
+##number of nodes should be bigger than one otherwise it will complain
+##SBATCH --cluster=mpi
+##SBATCH --partition=ib
+##SBATCH --partition=opa
+
+#########################################
+
+#    Some Namings and email 
+
+#########################################
+
+#SBATCH --job-name=shb105
+#SBATCH --output=Max.out.%J
+#SBATCH --mail-user=shb105@pitt.edu
+#SBATCH --mail-type=END,FAIL 
+
+########################################## 
+
+#           Node Count 
+
+########################################## 
+
+
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=1
+#SBATCH --cpus-per-task=1	
+
+## if you specify only this the system automatically finds out the number of nodes
+## SBATCH --ntasks=9
+
+# -O is used to overspecify the cores, especially beneficial for debugging
+## SBATCH -O
+###########################################
+
+             # Load modules
+
+###########################################
+# module purge removes all the previously loaded modules
+#module purge
+
+module load gcc/6.3.0
+module load lapack
+
+
+make
+./mMultCPU.exe 4096 4096 4096 >out.dat
+
+
+
+
+
